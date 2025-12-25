@@ -4,22 +4,25 @@ import 'package:chat_app/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../controllers/profile_controller.dart';
+
 class HomeScreen extends StatelessWidget {
   final homeController = Get.find<HomeController>();
   final themeController = Get.find<ThemeController>();
   final authController = Get.find<AuthController>();
+  final profileController = Get.find<ProfileController>();
 
   HomeScreen({super.key});
 
   @override
   Widget build(context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Chats"),
         actions: [
           Row(
             children: [
+              DrawerButton(onPressed: () => Get.toNamed('/edit_profile',arguments: profileController.user)),
               IconButton(
                 icon: Icon(Icons.logout),
                 tooltip: 'Logout',

@@ -4,4 +4,5 @@ class AppRoutes {
   static const home = '/home';
   static const chat = '/chat';
   static const profile = '/profile';
+  static const editProfile = '/edit_profile';
 }
