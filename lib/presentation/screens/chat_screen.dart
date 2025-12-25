@@ -49,8 +49,8 @@ class _ChatScreenState extends State<ChatScreen> {
       if (_scrollController.hasClients) {
         _scrollController.animateTo(
           _scrollController.position.maxScrollExtent,
-          duration: Duration(milliseconds: 200),
-          curve: Curves.easeOut,
+          duration: Duration(microseconds: 1 ),
+          curve:Curves.easeOut,
         );
       }
     });
@@ -67,16 +67,18 @@ class _ChatScreenState extends State<ChatScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          children: [
-            CircleAvatar(
-              backgroundImage: user.profilePic.isEmpty
-                  ? null
-                  : NetworkImage(user.profilePic),
-            ),
-            SizedBox(width: 10),
-            Text(user.name),
-          ],
+        title: InkWell(onTap: () => Get.toNamed('/profile', arguments: user),
+          child: Row(
+            children: [
+              CircleAvatar(
+                backgroundImage: user.profilePic.isEmpty
+                    ? null
+                    : NetworkImage(user.profilePic),
+              ),
+              SizedBox(width: 10),
+              Text(user.name),
+            ],
+          ),
         ),
       ),
       body: Column(
