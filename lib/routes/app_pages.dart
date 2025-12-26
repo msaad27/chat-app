@@ -9,6 +9,8 @@ import 'package:get/get.dart';
 import 'package:chat_app/controllers/profile_controller.dart';
 import 'package:chat_app/Models/user.dart';
 
+import '../presentation/screens/edit_profile.dart';
+
 class AppPages {
   static final pages = [
     GetPage(name: AppRoutes.login, page: () => LoginScreen()),
@@ -24,6 +26,16 @@ class AppPages {
     GetPage(
       name: AppRoutes.profile,
       page: () => ProfileScreen(),
+      binding: BindingsBuilder(() {
+        final arg = Get.arguments;
+        if (arg is UserModel) {
+          Get.put(ProfileController(user: arg));
+        }
+      }),
+    ),
+    GetPage(
+      name: AppRoutes.editProfile,
+      page: () => EditProfileScreen(),
       binding: BindingsBuilder(() {
         final arg = Get.arguments;
         if (arg is UserModel) {

@@ -8,6 +8,10 @@ class UserService {
     await _firestore.collection('users').doc(uid).update({'about': about});
   }
 
+  Future<void> updateName(String uid, String name) async {
+    await _firestore.collection('users').doc(uid).update({'name': name});
+  }
+
   Future<UserModel?> getUser(String uid) async {
     final doc = await _firestore.collection('users').doc(uid).get();
     if (!doc.exists) return null;

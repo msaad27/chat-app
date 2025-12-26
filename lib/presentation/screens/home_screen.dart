@@ -3,6 +3,8 @@ import 'package:chat_app/controllers/theme_controller.dart';
 import 'package:chat_app/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:chat_app/services/user_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeScreen extends StatelessWidget {
   final homeController = Get.find<HomeController>();
@@ -13,13 +15,27 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Chats"),
         actions: [
           Row(
             children: [
+              DrawerButton(
+                onPressed: () async {
+                  final uid = FirebaseAuth.instance.currentUser?.uid;
+                  if (uid == null) {
+                    Get.snackbar('Error', 'No logged in user');
+                    return;
+                  }
+                  final user = await UserService().getUser(uid);
+                  if (user == null) {
+                    Get.snackbar('Error', 'User not found');
+                    return;
+                  }
+                  Get.toNamed('/edit_profile', arguments: user);
+                },
+              ),
               IconButton(
                 icon: Icon(Icons.logout),
                 tooltip: 'Logout',
