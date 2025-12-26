@@ -8,11 +8,13 @@ class ProfileController extends GetxController {
   final UserService _service;
   late UserModel user;
   late TextEditingController aboutCtrl;
+  late TextEditingController nameCtrl;
   Rx<User?> currentUser = Rx<User?>(FirebaseAuth.instance.currentUser);
 
   ProfileController({required this.user, UserService? service})
     : _service = service ?? UserService() {
     aboutCtrl = TextEditingController(text: user.about);
+    nameCtrl = TextEditingController(text: user.name);
   }
 
   Future<void> saveAbout() async {
@@ -26,11 +28,29 @@ class ProfileController extends GetxController {
       about: text,
     );
     update();
-  }  
+  }
+
+  Future<void> editProfile() async {
+    final updatedName = nameCtrl.text.trim();
+    final updatedAbout = aboutCtrl.text.trim();
+
+    if (updatedName.isNotEmpty && updatedName != user.name) {
+      await _service.updateName(user.uid, updatedName);
+      user.name = updatedName;
+    }
+
+    if (updatedAbout != user.about) {
+      await _service.updateAbout(user.uid, updatedAbout);
+      user.about = updatedAbout;
+    }
+
+    update();
+  }
 
   @override
   void onClose() {
     aboutCtrl.dispose();
+    nameCtrl.dispose();
     super.onClose();
   }
 }

@@ -33,6 +33,15 @@ class AppPages {
         }
       }),
     ),
-    GetPage(name: AppRoutes.editProfile, page: () => EditProfileScreen()),
+    GetPage(
+      name: AppRoutes.editProfile,
+      page: () => EditProfileScreen(),
+      binding: BindingsBuilder(() {
+        final arg = Get.arguments;
+        if (arg is UserModel) {
+          Get.put(ProfileController(user: arg));
+        }
+      }),
+    ),
   ];
 }
