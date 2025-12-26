@@ -44,13 +44,26 @@ class EditProfileScreen extends StatelessWidget {
             ),
             SizedBox(height: 24),
             Center(
-              child: ElevatedButton(
-                onPressed: () async {
-                  await controller.editProfile();
-                  Get.back();
-                  Get.snackbar('Saved', 'Profile updated');
-                },
-                child: Text('Save'),
+              child: Row(mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () async {
+                      await controller.editProfile();
+                      Get.back();
+                      Get.snackbar('Saved', 'Profile updated');
+                    },
+                    child: Text('Save'),
+                  ),
+                  SizedBox(width: 20),
+                   ElevatedButton(
+                    onPressed: () async {
+                      await controller.deleteUser();
+                      Get.toNamed('/login');
+                      Get.snackbar('Deleted', 'Profile deleted');
+                    },
+                    child: Text('Delete'),
+                  ),
+                ],
               ),
             ),
           ],

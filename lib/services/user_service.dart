@@ -17,4 +17,8 @@ class UserService {
     if (!doc.exists) return null;
     return UserModel.fromJson(doc.data()!);
   }
+
+  Future<void> deleteUser(String uid) async {
+    await _firestore.collection('users').doc(uid).delete();
+  }
 }

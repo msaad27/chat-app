@@ -46,6 +46,14 @@ class ProfileController extends GetxController {
 
     update();
   }
+ Future<void> deleteUser() async {
+    final uid = user.uid;
+    await _service.deleteUser(uid);
+    final auth = FirebaseAuth.instance;
+    if (auth.currentUser?.uid == uid) {
+      await auth.signOut();
+    }
+  }
 
   @override
   void onClose() {
