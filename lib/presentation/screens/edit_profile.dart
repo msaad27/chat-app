@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../controllers/profile_controller.dart';
@@ -44,7 +45,8 @@ class EditProfileScreen extends StatelessWidget {
             ),
             SizedBox(height: 24),
             Center(
-              child: Row(mainAxisAlignment: MainAxisAlignment.center,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
                     onPressed: () async {
@@ -55,13 +57,11 @@ class EditProfileScreen extends StatelessWidget {
                     child: Text('Save'),
                   ),
                   SizedBox(width: 20),
-                   ElevatedButton(
-                    onPressed: () async {
-                      await controller.deleteUser();
-                      Get.toNamed('/login');
-                      Get.snackbar('Deleted', 'Profile deleted');
+                  ElevatedButton(
+                    onPressed: () {
+                      showDeleteAccountDialog(Get.find<ProfileController>());
                     },
-                    child: Text('Delete'),
+                    child: const Text("Delete Account"),
                   ),
                 ],
               ),
@@ -69,6 +69,61 @@ class EditProfileScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  void showDeleteAccountDialog(ProfileController controller) {
+    final TextEditingController passwordController = TextEditingController();
+
+    Get.defaultDialog(
+      title: "Delete Account",
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Text(
+            "Please enter your password to confirm account deletion.",
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 12),
+          TextField(
+            controller: passwordController,
+            obscureText: true,
+            decoration: const InputDecoration(
+              labelText: "Password",
+              border: OutlineInputBorder(),
+            ),
+          ),
+        ],
+      ),
+      textConfirm: "Delete",
+      textCancel: "Cancel",
+      confirmTextColor: Colors.white,
+      onConfirm: () async {
+        final user = FirebaseAuth.instance.currentUser;
+
+        if (user == null || user.email == null) {
+          Get.snackbar("Error", "No authenticated user found");
+          return;
+        }
+
+        if (passwordController.text.trim().isEmpty) {
+          Get.snackbar("Error", "Password cannot be empty");
+          return;
+        }
+
+        try {
+          await controller.deleteUser(
+            email: user.email!,
+            password: passwordController.text.trim(),
+          );
+
+          Get.back();
+          Get.snackbar("Success", "Account deleted successfully");
+          Get.offAllNamed('/login');
+        } catch (e) {
+          Get.snackbar("Error", e.toString());
+        }
+      },
     );
   }
 }
