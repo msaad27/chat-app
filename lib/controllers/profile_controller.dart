@@ -9,7 +9,6 @@ class ProfileController extends GetxController {
   late UserModel user;
   late TextEditingController aboutCtrl;
   late TextEditingController nameCtrl;
-  Rx<User?> currentUser = Rx<User?>(FirebaseAuth.instance.currentUser);
 
   ProfileController({required this.user, UserService? service})
     : _service = service ?? UserService() {
@@ -45,6 +44,26 @@ class ProfileController extends GetxController {
     }
 
     update();
+  }
+
+  Future<void> deleteUser({
+    required String email,
+    required String password,
+  }) async {
+    final auth = FirebaseAuth.instance;
+    final currentUser = auth.currentUser;
+    if (currentUser == null) {
+      throw Exception("No authenticated user found.");
+    }
+    final uid = currentUser.uid;
+    final credential=EmailAuthProvider.credential(
+      email: email,
+      password: password,
+    );
+    await currentUser.reauthenticateWithCredential(credential);
+    await _service.deleteUser(uid);
+    await currentUser.delete();
+    await auth.signOut();
   }
 
   @override
