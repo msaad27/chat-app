@@ -9,13 +9,11 @@ final ColorScheme lightColorScheme = ColorScheme(
   onSecondary: AppColors.onSecondary,
   error: Colors.red,
   onError: Colors.white,
-  background: AppColors.background,
-  onBackground: AppColors.onSurface,
   surface: AppColors.surface,
   onSurface: AppColors.onSurface,
 
   // REQUIRED in latest Flutter versions
-  surfaceVariant: AppColors.surface,
+  surfaceContainerHighest: AppColors.surface,
   onSurfaceVariant: AppColors.onSurface,
 );
 
@@ -25,12 +23,12 @@ final ColorScheme darkColorScheme = ColorScheme(
   onPrimary: AppColors.onPrimary,
   secondary: AppColors.secondary.withOpacity(0.9),
     onSecondary: AppColors.onSecondaryDark,
-  error: Colors.redAccent,
+  error: AppColors.red,
   onError: Colors.black,
   background: Color(0xFF0B1220),
-  onBackground: Colors.white,
-  surface: Color(0xFF0D1722),
-  onSurface: Colors.white,
+  onBackground: AppColors.surface,
+  surface: AppColors.black,
+  onSurface: AppColors.surface,
 );
 
 ThemeData lightTheme = ThemeData.from(colorScheme: lightColorScheme).copyWith(
@@ -40,7 +38,7 @@ ThemeData lightTheme = ThemeData.from(colorScheme: lightColorScheme).copyWith(
     foregroundColor: AppColors.onPrimary,
   ),
   inputDecorationTheme: InputDecorationTheme(
-    fillColor: Colors.white,
+    fillColor: AppColors.surface,
     filled: true,
   ),
 );
